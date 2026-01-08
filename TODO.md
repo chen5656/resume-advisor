@@ -1,0 +1,1 @@
+1. text tool. use alert box, I'd like to use a modal, it can come from third party library.
