@@ -1,5 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { AnnotationTool, Shape, Point } from '../utils/annotationTypes';
+import { AnnotationTool, Shape } from '../utils/annotationTypes';
 
 interface CanvasOverlayProps {
     tool: AnnotationTool;

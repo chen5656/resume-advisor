@@ -62,7 +62,7 @@ export default function PageToolbar({ shapes, onReset }: PageToolbarProps) {
                     Print
                 </button>
                 <button onClick={handleSave} className="page-btn save">
-                    Save Suggestions
+                    Share Suggestions
                 </button>
             </div>
 
