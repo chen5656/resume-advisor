@@ -13,7 +13,6 @@ build/
 !.env.test
 
 # Convex
-convex/_generated/
 
 # Logs
 npm-debug.log*
