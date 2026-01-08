@@ -1,0 +1,119 @@
+.toolbar-container {
+    position: fixed;
+    top: 50%;
+    /* 8.5in / 2 = 4.25in. Add small gap ~1rem */
+    left: calc(50% + 4.25in + 1.5rem);
+    right: auto;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding: 0;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    z-index: 1000;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    /* rounded corners for children */
+}
+
+@media (max-width: 1100px) {
+    .toolbar-container {
+        left: auto;
+        right: 20px;
+    }
+}
+
+.toolbar-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    border-radius: 0;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: #4b5563;
+    /* Slate 600 */
+    position: relative;
+    outline: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.toolbar-btn:last-child {
+    border-bottom: none;
+}
+
+.toolbar-btn:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #111827;
+    /* Gray 900 */
+}
+
+.toolbar-btn.active {
+    background: #eff6ff;
+    /* Blue 50 */
+    color: #2563eb;
+    /* Blue 600 */
+}
+
+.toolbar-btn.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 3px;
+    background: #2563eb;
+}
+
+.toolbar-btn svg {
+    width: 20px;
+    height: 20px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+
+/* Tooltip on hover */
+.toolbar-btn::after {
+    content: attr(aria-label);
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    left: auto;
+    bottom: auto;
+    transform: translateY(-50%) translateX(-10px);
+    background: #1f2937;
+    color: white;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+    pointer-events: none;
+}
+
+.toolbar-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%) translateX(-5px);
+}
+
+/* Divider vertical line if we want to group items (unused in vertical layout) */
+.toolbar-divider {
+    height: 1px;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.1);
+    margin: 0;
+}

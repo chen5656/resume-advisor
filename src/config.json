@@ -1,0 +1,33 @@
+{
+    "layout": {
+        "typography": {
+            "heading": "Outfit",
+            "body": "Inter",
+            "mono": "JetBrains Mono"
+        },
+        "header": {
+            "paddingTop": "0.5rem",
+            "paddingBottom": "1rem",
+            "marginTop": "0rem",
+            "marginBottom": "0rem"
+        },
+        "overview": {
+            "paddingTop": "0rem",
+            "paddingBottom": "0rem",
+            "marginTop": "0.5rem",
+            "marginBottom": "0.5rem"
+        },
+        "experience": {
+            "paddingTop": "0rem",
+            "paddingBottom": "0rem",
+            "marginTop": "0.5rem",
+            "marginBottom": "0.5rem"
+        },
+        "education": {
+            "paddingTop": "0rem",
+            "paddingBottom": "0rem",
+            "marginTop": "0.5rem",
+            "marginBottom": "0.5rem"
+        }
+    }
+}
