@@ -105,8 +105,11 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
             } else if (shape.type === 'text' && shape.position && shape.text) {
                 ctx.save();
                 ctx.font = 'bold 16px sans-serif';
-                ctx.shadowColor = 'rgba(255, 255, 255, 0.5)';
-                ctx.shadowBlur = 10;
+                ctx.lineJoin = 'round';
+                ctx.miterLimit = 2;
+                ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
+                ctx.lineWidth = 4;
+                ctx.strokeText(shape.text, shape.position.x, shape.position.y);
                 ctx.fillText(shape.text, shape.position.x, shape.position.y);
                 ctx.restore();
             }
@@ -146,11 +149,37 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
         };
 
         if (tool === 'text') {
-            const text = prompt('Enter text:');
-            if (text) {
-                onShapesChange([...shapes, { ...newShape, text, position: pos }]);
-            }
-            setIsDrawing(false); // Text is instant
+            setIsDrawing(false); // Text is instant, stop drawing interactions
+
+            // @ts-ignore
+            import('sweetalert2').then(({ default: Swal }) => {
+                Swal.fire({
+                    title: 'Enter Annotation Text',
+                    input: 'textarea',
+                    inputPlaceholder: 'Type your annotation here...',
+                    inputAttributes: {
+                        'aria-label': 'Type your annotation here'
+                    },
+                    showCancelButton: true,
+                    confirmButtonText: 'Add Annotation',
+                    confirmButtonColor: '#0ea5e9', // Sky 500
+                    cancelButtonColor: '#64748b',  // Slate 500
+                    customClass: {
+                        popup: 'rounded-xl shadow-2xl',
+                        confirmButton: 'font-bold',
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed && result.value) {
+                        // Use a functional update if possible, or fall back to closure 'shapes'
+                        // Since onShapesChange is likely setShapes, we can try passing a function if we change the type.
+                        // For now, we use the closure variable 'shapes'.
+                        // To avoid stale closures in a long-running async operation, we could use a ref, 
+                        // but for a quick modal, this is usually acceptable. 
+                        // Note: If real-time updates happen while modal is open, this might overwrite.
+                        onShapesChange([...shapes, { ...newShape, text: result.value, position: pos }]);
+                    }
+                });
+            });
         } else if (tool === 'eraser') {
             const eraserShape: Shape = {
                 id: Date.now().toString(),

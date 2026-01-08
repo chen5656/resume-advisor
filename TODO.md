@@ -1,1 +1,3 @@
-1. text tool. use alert box, I'd like to use a modal, it can come from third party library.
+
+1. [x] I have very high standards for documentation. Please create a well-written, professional README for me.
+1. add background halo to text annotations, this halo need to have a transparent background.
