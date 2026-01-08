@@ -18,8 +18,29 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
     const currentShapeRef = useRef<Shape | null>(null);
 
     // Configuration
-    const strokeWidth = 2;
-    const color = tool === 'eraser' ? 'rgba(0,0,0,0)' : '#ef4444'; // Red for annotations
+    const getToolStyle = (t: AnnotationTool) => {
+        if (t === 'highlight') {
+            return {
+                strokeWidth: 20,
+                color: 'rgba(255, 255, 0, 0.3)', // Transparent yellow
+                compositeOperation: 'multiply' as GlobalCompositeOperation
+            };
+        }
+        if (t === 'eraser') {
+            return {
+                strokeWidth: 20,
+                color: 'rgba(0,0,0,1)',
+                compositeOperation: 'destination-out' as GlobalCompositeOperation
+            };
+        }
+        return {
+            strokeWidth: 2,
+            color: '#ef4444',
+            compositeOperation: 'source-over' as GlobalCompositeOperation
+        };
+    };
+
+    const currentStyle = getToolStyle(tool);
 
     useEffect(() => {
         const canvas = canvasRef.current;
@@ -48,16 +69,20 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
         const drawShape = (shape: Shape) => {
             ctx.lineWidth = shape.strokeWidth;
 
+            // Apply style based on shape type or saved properties
             if (shape.type === 'eraser') {
                 ctx.globalCompositeOperation = 'destination-out';
-                ctx.lineWidth = 20; // Eraser size
+            } else if (shape.type === 'highlight') {
+                ctx.globalCompositeOperation = 'multiply'; // Better for highlighting text
+                ctx.strokeStyle = shape.color;
+                ctx.fillStyle = shape.color;
             } else {
                 ctx.globalCompositeOperation = 'source-over';
                 ctx.strokeStyle = shape.color;
                 ctx.fillStyle = shape.color;
             }
 
-            if ((shape.type === 'pen' || shape.type === 'eraser') && shape.points && shape.points.length > 0) {
+            if ((shape.type === 'pen' || shape.type === 'eraser' || shape.type === 'highlight') && shape.points && shape.points.length > 0) {
                 ctx.beginPath();
                 ctx.moveTo(shape.points[0].x, shape.points[0].y);
                 for (let i = 1; i < shape.points.length; i++) {
@@ -113,11 +138,11 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
         const newShape: Shape = {
             id: Date.now().toString(),
             type: tool,
-            color: color,
-            strokeWidth: strokeWidth,
-            points: tool === 'pen' ? [pos] : undefined,
-            start: tool !== 'pen' ? pos : undefined,
-            end: tool !== 'pen' ? pos : undefined
+            color: currentStyle.color,
+            strokeWidth: currentStyle.strokeWidth,
+            points: (tool === 'pen' || tool === 'highlight') ? [pos] : undefined,
+            start: (tool !== 'pen' && tool !== 'highlight') ? pos : undefined,
+            end: (tool !== 'pen' && tool !== 'highlight') ? pos : undefined
         };
 
         if (tool === 'text') {
@@ -127,11 +152,10 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
             }
             setIsDrawing(false); // Text is instant
         } else if (tool === 'eraser') {
-            // Eraser acts like a pen but with destination-out
             const eraserShape: Shape = {
                 id: Date.now().toString(),
                 type: 'eraser',
-                color: 'rgba(0,0,0,1)', // doesn't matter
+                color: 'rgba(0,0,0,1)',
                 strokeWidth: 20,
                 points: [pos]
             };
@@ -147,12 +171,12 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
         if (!isDrawing) return;
         const pos = getMousePos(e);
 
-        if (tool === 'pen' || tool === 'eraser') {
+        if (tool === 'pen' || tool === 'eraser' || tool === 'highlight') {
             setCurrentShape(prev => {
                 if (!prev || !prev.points) return prev;
                 return {
                     ...prev,
-                    points: [...prev.points, pos] // Naive appendment
+                    points: [...prev.points, pos]
                 };
             });
         } else {
@@ -178,10 +202,17 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
 
     const isInteracting = tool !== 'cursor';
 
+    // Highlight tool might want an I-beam cursor or specific crosshair
+    const getCursorClass = () => {
+        if (!isInteracting) return 'pointer-events-none';
+        if (tool === 'highlight') return 'cursor-text pointer-events-auto';
+        return 'cursor-crosshair pointer-events-auto';
+    };
+
     return (
         <canvas
             ref={canvasRef}
-            className={`absolute inset-0 z-50 ${isInteracting ? 'cursor-crosshair pointer-events-auto' : 'pointer-events-none'}`}
+            className={`absolute inset-0 z-50 ${getCursorClass()}`}
             style={{ width: '100%', height: '100%' }}
             onMouseDown={isInteracting ? handleMouseDown : undefined}
             onMouseMove={isInteracting ? handleMouseMove : undefined}

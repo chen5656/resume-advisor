@@ -10,7 +10,7 @@ interface ToolbarProps {
 export default function Toolbar({ selectedTool, onSelectTool }: ToolbarProps) {
     const tools: { id: AnnotationTool; label: string; icon: React.ReactNode }[] = [
         {
-            id: 'cursor',
+            id: 'highlight',
             label: 'Select',
             icon: (
                 <svg viewBox="0 0 24 24">

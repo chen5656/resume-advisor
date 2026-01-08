@@ -1,4 +1,4 @@
-export type AnnotationTool = 'cursor' | 'pen' | 'line' | 'circle' | 'text' | 'eraser';
+export type AnnotationTool = 'cursor' | 'pen' | 'line' | 'circle' | 'text' | 'eraser' | 'highlight';
 
 export interface Point {
     x: number;

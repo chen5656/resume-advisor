@@ -1,6 +1,6 @@
 # HUAJUN CHEN | ArcGIS · Python · React
 
-> Phone: +1 469-440-9666 | Email: Hj.ch.chen@gmail.com | Location: Sachse, TX | LinkedIn: https://www.linkedin.com/in/huajun-chen/
+> Phone: +1 469-440-9666 | Email: hj.ch.chen@gmail.com | Location: Sachse, TX | LinkedIn: https://www.linkedin.com/in/huajun-chen/
 
 
 
