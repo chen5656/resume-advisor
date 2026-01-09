@@ -171,8 +171,8 @@ const ResumeRender: React.FC<Props> = ({ resume, selectedTool, shapes, onShapesC
                                 {education.map((edu, i) => (
                                     <li key={i}>
                                         <span className="font-bold block text-sm leading-tight text-gray-900" dangerouslySetInnerHTML={{ __html: edu.degree }} />
-                                        <span className="text-sm text-gray-700 block italic" dangerouslySetInnerHTML={{ __html: edu.institution }} />
-                                        <span className="text-xs text-gray-500 block font-mono" dangerouslySetInnerHTML={{ __html: edu.period }} />
+                                        <span className="text-sm text-gray-800 block" dangerouslySetInnerHTML={{ __html: edu.institution }} />
+                                        <span className="text-sm text-gray-800 block" dangerouslySetInnerHTML={{ __html: edu.period }} />
                                     </li>
                                 ))}
                             </ul>
