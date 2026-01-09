@@ -1,4 +1,4 @@
-# Resume Advisor
+# 📄 Resume Advisor
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB)
@@ -6,73 +6,94 @@
 ![Convex](https://img.shields.io/badge/convex-%23FF4155.svg?style=flat&logo=convex&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat&logo=typescript&logoColor=white)
 
-**Resume Advisor** is a powerful, interactive tool designed for reviewing, styling, and annotating resumes. By bridging the gap between raw functional Markdown content and visual presentation, it allows users to render resumes with precision, customize layouts dynamically, and leave persistent visual feedback directly on the document.
+**Resume Advisor** is a premium, interactive platform for reviewing resumes. It transforms static Markdown content into a stunning visual document, providing experts and candidates with a powerful toolset for real-time feedback and design iteration.
 
-Whether you are refining your own resume or reviewing a candidate's, Resume Advisor provides a seamless workflow for feedback and iteration.
+---
 
-## ✨ Key Features
+## ✨ Features
 
-- **📄 Markdown-to-UI Rendering**: Seamlessly parses `Resume.md` files into a structured, professional HTML/CSS layout.
-- **✏️ Interactive Annotation Tools**:
-  - **Pen Tool**: Freehand drawing for quick circles, arrows, or emphasis.
-  - (**More tools planned/available**)
-  - Annotations are overlayed precisely on top of the resume content.
-- **☁️ Cloud Persistence**: Integrated with **Convex** to automatically save and sync annotations in real-time. Feedback is never lost.
-- **🎨 Configurable Design System**:
-  - Control typography (Headings, Body, Monospace fonts).
-  - Fine-tune spacing, padding, and margins for every section (Header, Experience, Education, etc.) via `config.json`.
-- **⚡ Fast & Responsive**: Built on Vite for instant feedback and optimized for performance.
+### 🎨 Professional Rendering
+- **Markdown-to-UI Architecture**: Automatically converts standard `Resume.md` files into a polished, production-ready layout using modern CSS.
+- **Dynamic Styling**: Configure typography (Heading, Body, Mono) and section spacing via a simple `config.json` file.
+
+### ✏️ Advanced Annotation Suite
+A full suite of tools to mark up resumes with precision:
+- **🖋️ Pen Tool**: Freehand drawing for emphasis and circling.
+- **🖍️ Highlighter**: Emphasize key skills or achievements with bright overlays.
+- **📏 Line Tool**: Draw straight lines for clean underlining or structural feedback.
+- **🔤 Text Tool**: Drop comments and text notes directly onto the document.
+- **🧽 Eraser**: Easily correct or remove specific annotations.
+
+### 🔄 Workflow Efficiency
+- **Undo/Redo History**: Accidents happen! Navigate through your entire annotation history with ease.
+- **Real-time Persistence**: Powered by **Convex**, all annotations are saved instantly to the cloud.
+- **Shareable Links**: Generate unique URLs to share your suggestions with others instantly.
+
+### 🖨️ Production Ready
+- **Print Optimization**: A dedicated print mode ensures the resume looks perfect on paper, automatically hiding all UI toolbars and controls.
+- **Responsive Viewer**: Designed for clarity across all desktop screens.
+
+---
 
 ## 🛠️ Tech Stack
 
-- **Frontend**: [React](https://react.dev/) with [TypeScript](https://www.typescriptlang.org/)
-- **Build Tool**: [Vite](https://vitejs.dev/)
-- **Backend & Database**: [Convex](https://www.convex.dev/) (Real-time database and backend functions)
-- **Styling**: Modern CSS with CSS Variables and JSON-based configuration
-- **Notifications**: [Sonner](https://sonner.emilkowal.ski/)
-- **Alerts**: [SweetAlert2](https://sweetalert2.github.io/)
+- **Core**: [React 18](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **State & Backend**: [Convex](https://www.convex.dev/) (Real-time Cloud Database)
+- **Styling**: Vanilla CSS with CSS Variables & Glassmorphism
+- **Icons**: [React Icons](https://react-icons.github.io/react-icons/) (Lucide)
+- **Feedback**: [Sonner](https://sonner.emilkowal.ski/)
+- **Build**: [Vite](https://vitejs.dev/)
 
-## 🚀 Getting Started
+---
 
-Follow these steps to set up the project locally.
+## 🚀 Quick Start
 
-### Prerequisites
-
-- Node.js (v18 or higher recommended)
+### 1. Prerequisites
+- Node.js (v18+)
 - npm or yarn
 
-### Installation
+### 2. Installation
+```bash
+git clone <repository-url>
+cd resume-advisor
+npm install
+```
 
-1. **Clone the repository:**
-   ```bash
-   git clone <repository-url>
-   cd resume-advisor
-   ```
+### 3. Start Backend (Convex)
+Resume Advisor uses Convex for real-time data. Run this in a separate terminal:
+```bash
+npx convex dev
+```
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+### 4. Launch Application
+```bash
+npm run dev
+```
+Visit `http://localhost:5173` to start advising!
 
-3. **Initialize Convex:**
-   This project uses Convex for the backend. You need to set it up to handle data persistence.
-   ```bash
-   npx convex dev
-   ```
-   *This command will prompt you to log in to Convex and configure a project if you haven't already. It will then keep running to sync your schema and functions.*
+---
 
-4. **Run the Development Server:**
-   In a new terminal window:
-   ```bash
-   npm run dev
-   ```
+## 📂 Project Structure
 
-5. **Open the App:**
-   Visit `http://localhost:5173` (or the URL provided in the terminal) to view the application.
+```text
+resume-advisor/
+├── convex/              # Backend (Schema & API)
+│   ├── schema.ts        # Data definitions
+│   └── annotations.ts   # CRUD operations for shapes
+├── src/
+│   ├── assets/          # Static assets & Resume.md
+│   ├── components/      # UI Components (Toolbar, ResumeRender)
+│   ├── utils/           # Parser & Annotation logic
+│   ├── config.json      # Design system configuration
+│   └── App.tsx          # Application entry
+└── index.html           # Root HTML template
+```
 
-## ⚙️ Configuration
+---
 
-You can customize the resume layout without touching the code by editing `src/config.json`.
+## ⚙️ Customization
+
+Customize your resume's look and feel without writing code. Edit `src/config.json`:
 
 ```json
 {
@@ -83,34 +104,18 @@ You can customize the resume layout without touching the code by editing `src/co
       "mono": "JetBrains Mono"
     },
     "header": {
-      "paddingTop": "1rem",
-      "marginBottom": "0.5rem"
-    },
-    ...
+      "paddingTop": "1.5rem",
+      "marginBottom": "0.75rem"
+    }
   }
 }
 ```
 
-## 📂 Project Structure
-
-```
-resume-advisor/
-├── convex/              # Backend functions and schema (Convex)
-│   ├── schema.ts        # Database schema definition
-│   └── annotations.ts   # API endpoints for saving/loading annotations
-├── src/
-│   ├── assets/          # Static assets (including Resume.md)
-│   ├── components/      # React components (ResumeRender, Toolbar, etc.)
-│   ├── utils/           # Utility functions (resumeParser, annotation types)
-│   ├── App.tsx          # Main application logic
-│   ├── config.json      # Layout and style configuration
-│   └── main.tsx         # Entry point
-└── ...
-```
+---
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+We welcome contributions! Please feel free to open issues or submit pull requests to improve the rendering engine or annotation tools.
 
 ## 📄 License
 

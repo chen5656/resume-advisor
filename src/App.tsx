@@ -18,6 +18,10 @@ function App() {
     const [selectedTool, setSelectedTool] = useState<AnnotationTool>('pen');
     const [shapes, setShapes] = useState<Shape[]>([]);
 
+    // Undo/Redo State
+    const [history, setHistory] = useState<Shape[][]>([[]]);
+    const [historyIndex, setHistoryIndex] = useState(0);
+
     // Get resumeId from URL or default to "default"
     const params = new URLSearchParams(window.location.search);
     const resumeId = params.get('id') || 'default';
@@ -36,11 +40,38 @@ function App() {
             try {
                 const loaded = JSON.parse(savedAnnotations.shapes);
                 setShapes(loaded);
+                setHistory([loaded]);
+                setHistoryIndex(0);
             } catch (e) {
                 console.error("Failed to parse annotations", e);
             }
         }
     }, [savedAnnotations]);
+
+    const handleShapesChange = (newShapes: Shape[]) => {
+        setShapes(newShapes);
+
+        // Add to history
+        const newHistory = history.slice(0, historyIndex + 1);
+        setHistory([...newHistory, newShapes]);
+        setHistoryIndex(newHistory.length);
+    };
+
+    const undo = () => {
+        if (historyIndex > 0) {
+            const newIndex = historyIndex - 1;
+            setHistoryIndex(newIndex);
+            setShapes(history[newIndex]);
+        }
+    };
+
+    const redo = () => {
+        if (historyIndex < history.length - 1) {
+            const newIndex = historyIndex + 1;
+            setHistoryIndex(newIndex);
+            setShapes(history[newIndex]);
+        }
+    };
 
     if (!resumeData) {
         return <div className="loading-screen">Loading Resume...</div>;
@@ -51,6 +82,10 @@ function App() {
             <Toolbar
                 selectedTool={selectedTool}
                 onSelectTool={setSelectedTool}
+                onUndo={undo}
+                onRedo={redo}
+                canUndo={historyIndex > 0}
+                canRedo={historyIndex < history.length - 1}
             />
 
             <div className="resume-viewer-container">
@@ -58,11 +93,11 @@ function App() {
                     resume={resumeData}
                     selectedTool={selectedTool}
                     shapes={shapes}
-                    onShapesChange={setShapes}
+                    onShapesChange={handleShapesChange}
                 />
             </div>
 
-            <PageToolbar shapes={shapes} onReset={() => setShapes([])} />
+            <PageToolbar shapes={shapes} onReset={() => handleShapesChange([])} />
             <Toaster />
         </div>
     );

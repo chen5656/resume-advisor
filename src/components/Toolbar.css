@@ -60,7 +60,12 @@
     border-bottom: none;
 }
 
-.toolbar-btn:hover {
+.toolbar-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+}
+
+.toolbar-btn:hover:not(:disabled) {
     background: rgba(0, 0, 0, 0.05);
     color: #111827;
     /* Gray 900 */

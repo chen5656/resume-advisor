@@ -2,14 +2,25 @@ import React from 'react';
 import { AnnotationTool } from '../utils/annotationTypes';
 import './Toolbar.css';
 
-import { LuHighlighter, LuEraser, LuPencil } from 'react-icons/lu';
+import { LuHighlighter, LuEraser, LuPencil, LuUndo, LuRedo } from 'react-icons/lu';
 
 interface ToolbarProps {
     selectedTool: AnnotationTool;
     onSelectTool: (tool: AnnotationTool) => void;
+    onUndo: () => void;
+    onRedo: () => void;
+    canUndo: boolean;
+    canRedo: boolean;
 }
 
-export default function Toolbar({ selectedTool, onSelectTool }: ToolbarProps) {
+export default function Toolbar({
+    selectedTool,
+    onSelectTool,
+    onUndo,
+    onRedo,
+    canUndo,
+    canRedo
+}: ToolbarProps) {
     const tools: { id: AnnotationTool; label: string; icon: React.ReactNode }[] = [
         {
             id: 'highlight',
@@ -59,6 +70,27 @@ export default function Toolbar({ selectedTool, onSelectTool }: ToolbarProps) {
                     {tool.icon}
                 </button>
             ))}
+
+            <div className="toolbar-divider" />
+
+            <button
+                className="toolbar-btn"
+                onClick={onUndo}
+                disabled={!canUndo}
+                aria-label="Undo"
+                title="Undo"
+            >
+                <LuUndo />
+            </button>
+            <button
+                className="toolbar-btn"
+                onClick={onRedo}
+                disabled={!canRedo}
+                aria-label="Redo"
+                title="Redo"
+            >
+                <LuRedo />
+            </button>
         </div>
     );
 }
