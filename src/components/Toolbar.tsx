@@ -31,15 +31,6 @@ export default function Toolbar({ selectedTool, onSelectTool }: ToolbarProps) {
             )
         },
         {
-            id: 'circle',
-            label: 'Circle',
-            icon: (
-                <svg viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="9" />
-                </svg>
-            )
-        },
-        {
             id: 'text',
             label: 'Text',
             icon: (
