@@ -238,11 +238,9 @@ const ResumeRender: React.FC<Props> = ({ resume, selectedTool, shapes, onShapesC
                                     )}
                                     {industries && (
                                         <div className={expertises ? "mt-2" : ""}>
-                                            <ul className="industry-list list-none space-y-1">
-                                                {industries.map((ind, i) => (
-                                                    <li key={i} className="text-sm text-gray-800">{ind}</li>
-                                                ))}
-                                            </ul>
+                                            <span className="text-sm text-gray-800">
+                                                {industries.join(', ')}
+                                            </span>
                                         </div>
                                     )}
                                 </div>
