@@ -109,8 +109,70 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
                 ctx.miterLimit = 2;
                 ctx.strokeStyle = 'rgba(255, 255, 255, 0.8)';
                 ctx.lineWidth = 4;
-                ctx.strokeText(shape.text, shape.position.x, shape.position.y);
-                ctx.fillText(shape.text, shape.position.x, shape.position.y);
+
+                const x = shape.position.x;
+                const lineHeight = 24;
+                const maxWidth = canvas.width - x - 20; // 20px padding
+                const paragraphs = shape.text.split('\n');
+                let currentY = shape.position.y;
+
+                paragraphs.forEach((paragraph) => {
+                    const words = paragraph.split(' ');
+                    let line = '';
+
+                    for (let n = 0; n < words.length; n++) {
+                        const word = words[n];
+                        const wordMetrics = ctx.measureText(word);
+
+                        // If a single word is wider than the max width
+                        if (wordMetrics.width > maxWidth) {
+                            // Flush current buffer if it exists
+                            if (line !== '') {
+                                ctx.strokeText(line, x, currentY);
+                                ctx.fillText(line, x, currentY);
+                                currentY += lineHeight;
+                                line = '';
+                            }
+
+                            // Split long word character by character
+                            let charLine = '';
+                            for (let i = 0; i < word.length; i++) {
+                                const char = word[i];
+                                const testCharLine = charLine + char;
+                                const charMetrics = ctx.measureText(testCharLine);
+
+                                if (charMetrics.width > maxWidth) {
+                                    ctx.strokeText(charLine, x, currentY);
+                                    ctx.fillText(charLine, x, currentY);
+                                    currentY += lineHeight;
+                                    charLine = char;
+                                } else {
+                                    charLine = testCharLine;
+                                }
+                            }
+                            if (charLine) {
+                                line = charLine + ' ';
+                            }
+                        } else {
+                            // Normal word behavior
+                            const testLine = line + word + ' ';
+                            const metrics = ctx.measureText(testLine);
+
+                            if (metrics.width > maxWidth && line !== '') {
+                                ctx.strokeText(line, x, currentY);
+                                ctx.fillText(line, x, currentY);
+                                line = word + ' ';
+                                currentY += lineHeight;
+                            } else {
+                                line = testLine;
+                            }
+                        }
+                    }
+                    ctx.strokeText(line, x, currentY);
+                    ctx.fillText(line, x, currentY);
+                    currentY += lineHeight;
+                });
+
                 ctx.restore();
             }
         };

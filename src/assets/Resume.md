@@ -1,6 +1,6 @@
-# HUAJUN CHEN | ArcGIS · Python · React
+# HUAJUN CHEN | Python · React
 
-> Phone: +1 469-440-9666 | Email: hj.ch.chen@gmail.com | Location: Sachse, TX | LinkedIn: https://www.linkedin.com/in/huajun-chen/
+> Phone: +1 469-440-9666 | Email: hj.ch.chen@gmail.com | Location: Dallas, TX | LinkedIn: https://www.linkedin.com/in/huajun-chen/
 
 
 
@@ -11,7 +11,7 @@ Strategic GIS Lead & Enterprise Architect with 15+ years of experience specializ
 # EXPERIENCE
 
 ## City of Garland | GIS Lead | 2025 - Present
-*   **Strategic Enterprise Architecture & Migration**: Architecting the City’s transition from ArcGIS 10.8 to 11.x, redesigning full-stack infrastructure on SQL Server.
+*   **Strategic Enterprise Architecture & Migration**: Architecting the City’s tdouransition from ArcGIS 10.8 to 11.x, redesigning full-stack infrastructure on SQL Server.
     *   Designed integrated system architecture and coordinated cross-departmental IT resources to ensure security and performance alignment.
     *   Establishing technical delivery standards and transitioning legacy workflows to ArcGIS Experience Builder to modernize spatial capabilities.
 *   **Innovation & AI Strategy (POC)**: Pioneering Gen AI integration into municipal workflows to drive operational efficiency.
