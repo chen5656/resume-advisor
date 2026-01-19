@@ -59,18 +59,11 @@ export default function PageToolbar({ shapes, onReset }: PageToolbarProps) {
         }
     };
 
-    const handlePrint = () => {
-        window.print();
-    };
-
     return (
         <>
             <div className="page-toolbar">
                 <button onClick={onReset} className="page-btn reset">
                     Reset
-                </button>
-                <button onClick={handlePrint} className="page-btn print">
-                    Print
                 </button>
                 <button onClick={handleSave} className="page-btn save">
                     Share Suggestions
@@ -135,13 +128,6 @@ export default function PageToolbar({ shapes, onReset }: PageToolbarProps) {
                 .reset:hover {
                     background: #e2e8f0;
                     color: #ef4444;
-                }
-                .print {
-                    background: #e0f2fe;
-                    color: #0284c7;
-                }
-                .print:hover {
-                    background: #bae6fd;
                 }
                 .save {
                     background: #10b981;
