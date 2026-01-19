@@ -1,4 +1,4 @@
-# Resume Advisor
+# Web Reviewer
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![React](https://img.shields.io/badge/react-%2320232a.svg?style=flat&logo=react&logoColor=%2361DAFB)
@@ -6,14 +6,13 @@
 ![Convex](https://img.shields.io/badge/convex-%23FF4155.svg?style=flat&logo=convex&logoColor=white)
 ![TypeScript](https://img.shields.io/badge/typescript-%23007ACC.svg?style=flat&logo=typescript&logoColor=white)
 
-Resume Advisor is a browser-based review workspace for resumes and public web pages. Paste a URL to open a dedicated review tab, annotate with drawings and notes, and share a saved link.
+Web Reviewer is a browser-based review workspace for public web pages. Paste a URL to open a dedicated review tab, annotate with drawings and notes, and share a saved link.
 
 ## Features
 
 - Review external web pages in an embedded view while preserving original CSS, layout, and structure.
 - Annotation toolkit with pen, highlighter, line, text, and eraser tools plus undo/redo.
 - Persistent storage and shareable links powered by Convex.
-- Resume mode that renders `src/assets/Resume.md` when no external page is provided and `?resume=1` (or `?id=...`) is present.
 - Frame-aware UX that detects pages that block embedding and offers a direct-open fallback.
 
 ## Quick Start
@@ -23,7 +22,7 @@ Resume Advisor is a browser-based review workspace for resumes and public web pa
 
 ```bash
 git clone <repository-url>
-cd resume-advisor
+cd web-reviewer
 npm install
 ```
 

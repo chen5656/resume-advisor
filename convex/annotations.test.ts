@@ -40,7 +40,7 @@ const createMockDb = () => {
                                 return rows[0] ?? null;
                             }
                             return (
-                                rows.find((row) => (row as Record<string, string>)[fieldName!] === fieldValue) ??
+                                rows.find((row) => (row as Record<string, any>)[fieldName!] === fieldValue) ??
                                 null
                             );
                         },
@@ -72,7 +72,7 @@ describe('annotations', () => {
         const db = createMockDb();
         const nowSpy = vi.spyOn(Date, 'now').mockReturnValue(1234);
 
-        await save._handler({ db } as any, { resumeId: 'resume-1', shapes: '[]' });
+        await (save as any)._handler({ db } as any, { resumeId: 'resume-1', shapes: '[]' });
 
         expect(db.tables.annotations).toHaveLength(1);
         expect(db.tables.annotations[0]).toMatchObject({
@@ -89,10 +89,10 @@ describe('annotations', () => {
         const nowSpy = vi.spyOn(Date, 'now');
 
         nowSpy.mockReturnValueOnce(1000);
-        await save._handler({ db } as any, { resumeId: 'resume-1', shapes: '[]' });
+        await (save as any)._handler({ db } as any, { resumeId: 'resume-1', shapes: '[]' });
 
         nowSpy.mockReturnValueOnce(2000);
-        await save._handler({ db } as any, { resumeId: 'resume-1', shapes: '[{\"x\":1}]' });
+        await (save as any)._handler({ db } as any, { resumeId: 'resume-1', shapes: '[{\"x\":1}]' });
 
         expect(db.tables.annotations).toHaveLength(1);
         expect(db.tables.annotations[0]).toMatchObject({
@@ -107,8 +107,8 @@ describe('annotations', () => {
     it('load returns the matching annotation', async () => {
         const db = createMockDb();
 
-        await save._handler({ db } as any, { resumeId: 'resume-1', shapes: '[]' });
-        const result = await load._handler({ db } as any, { resumeId: 'resume-1' });
+        await (save as any)._handler({ db } as any, { resumeId: 'resume-1', shapes: '[]' });
+        const result = await (load as any)._handler({ db } as any, { resumeId: 'resume-1' });
 
         expect(result?.resumeId).toBe('resume-1');
         expect(result?.shapes).toBe('[]');
