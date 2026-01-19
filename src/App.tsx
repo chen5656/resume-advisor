@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import './App.css';
 import { Toaster } from 'sonner';
 import { parseResume } from './utils/resumeParser';
 import ResumeRender from './components/ResumeRender';
+import WebPageViewer from './components/WebPageViewer';
 import Toolbar from './components/Toolbar';
 import PageToolbar from './components/PageToolbar';
 import { AnnotationTool, Shape } from './utils/annotationTypes';
@@ -14,7 +15,6 @@ import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 
 function App() {
-    const [resumeData, setResumeData] = useState<ResumeConfig | null>(null);
     const [selectedTool, setSelectedTool] = useState<AnnotationTool>('pen');
     const [shapes, setShapes] = useState<Shape[]>([]);
 
@@ -22,18 +22,30 @@ function App() {
     const [history, setHistory] = useState<Shape[][]>([[]]);
     const [historyIndex, setHistoryIndex] = useState(0);
 
-    // Get resumeId from URL or default to "default"
-    const params = new URLSearchParams(window.location.search);
-    const resumeId = params.get('id') || 'default';
+    const searchParams = useMemo(() => new URLSearchParams(window.location.search), []);
+    const resumeId = searchParams.get('id') || 'default';
+    const pageParam = searchParams.get('page') || searchParams.get('target') || searchParams.get('url');
+    const externalUrl = useMemo(() => {
+        if (!pageParam) return null;
+        try {
+            const parsed = new URL(pageParam, window.location.href);
+            if (parsed.protocol !== 'http:' && parsed.protocol !== 'https:') {
+                return null;
+            }
+            return parsed.toString();
+        } catch (error) {
+            return null;
+        }
+    }, [pageParam]);
+
+    const resumeData = useMemo<ResumeConfig | null>(() => {
+        if (externalUrl || !resumeMarkdown) return null;
+        return parseResume(resumeMarkdown);
+    }, [externalUrl, resumeMarkdown]);
 
     const savedAnnotations = useQuery(api.annotations.load, { resumeId });
 
-    useEffect(() => {
-        if (resumeMarkdown) {
-            const parsed = parseResume(resumeMarkdown);
-            setResumeData(parsed);
-        }
-    }, []);
+    const isExternalPage = Boolean(externalUrl);
 
     useEffect(() => {
         if (savedAnnotations?.shapes) {
@@ -73,12 +85,12 @@ function App() {
         }
     };
 
-    if (!resumeData) {
+    if (!isExternalPage && !resumeData) {
         return <div className="loading-screen">Loading Resume...</div>;
     }
 
     return (
-        <div className="app-main">
+        <div className={`app-main ${isExternalPage ? 'app-main--web' : ''}`}>
             <Toolbar
                 selectedTool={selectedTool}
                 onSelectTool={setSelectedTool}
@@ -89,12 +101,21 @@ function App() {
             />
 
             <div className="resume-viewer-container">
-                <ResumeRender
-                    resume={resumeData}
-                    selectedTool={selectedTool}
-                    shapes={shapes}
-                    onShapesChange={handleShapesChange}
-                />
+                {isExternalPage && externalUrl ? (
+                    <WebPageViewer
+                        url={externalUrl}
+                        selectedTool={selectedTool}
+                        shapes={shapes}
+                        onShapesChange={handleShapesChange}
+                    />
+                ) : (
+                    <ResumeRender
+                        resume={resumeData!}
+                        selectedTool={selectedTool}
+                        shapes={shapes}
+                        onShapesChange={handleShapesChange}
+                    />
+                )}
             </div>
 
             <PageToolbar shapes={shapes} onReset={() => handleShapesChange([])} />
@@ -104,4 +125,3 @@ function App() {
 }
 
 export default App;
-

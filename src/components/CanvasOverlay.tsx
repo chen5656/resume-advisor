@@ -1,15 +1,16 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect, useCallback } from 'react';
 import { AnnotationTool, Shape } from '../utils/annotationTypes';
 
 interface CanvasOverlayProps {
     tool: AnnotationTool;
     shapes: Shape[];
     onShapesChange: (shapes: Shape[]) => void;
+    highlightBlendMode?: GlobalCompositeOperation;
     width?: number; // Optional, can derive from parent
     height?: number;
 }
 
-const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesChange }) => {
+const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesChange, highlightBlendMode = 'multiply' }) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDrawing, setIsDrawing] = useState(false);
     const [currentShape, setCurrentShape] = useState<Shape | null>(null);
@@ -42,21 +43,7 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
 
     const currentStyle = getToolStyle(tool);
 
-    useEffect(() => {
-        const canvas = canvasRef.current;
-        if (!canvas) return;
-
-        // Resize canvas to parent
-        const parent = canvas.parentElement;
-        if (parent) {
-            canvas.width = parent.clientWidth;
-            canvas.height = parent.clientHeight;
-        }
-
-        renderCanvas();
-    }, [shapes, currentShape, tool]); // Re-render when shapes change
-
-    const renderCanvas = () => {
+    const renderCanvas = useCallback(() => {
         const canvas = canvasRef.current;
         if (!canvas) return;
         const ctx = canvas.getContext('2d');
@@ -73,7 +60,7 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
             if (shape.type === 'eraser') {
                 ctx.globalCompositeOperation = 'destination-out';
             } else if (shape.type === 'highlight') {
-                ctx.globalCompositeOperation = 'multiply'; // Better for highlighting text
+                ctx.globalCompositeOperation = highlightBlendMode;
                 ctx.strokeStyle = shape.color;
                 ctx.fillStyle = shape.color;
             } else {
@@ -184,7 +171,42 @@ const CanvasOverlay: React.FC<CanvasOverlayProps> = ({ tool, shapes, onShapesCha
 
         // Reset composite op
         ctx.globalCompositeOperation = 'source-over';
-    };
+    }, [currentShape, highlightBlendMode, shapes]);
+
+    const resizeCanvas = useCallback(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const parent = canvas.parentElement;
+        if (!parent) return;
+
+        const nextWidth = parent.clientWidth;
+        const nextHeight = parent.clientHeight;
+
+        if (canvas.width !== nextWidth || canvas.height !== nextHeight) {
+            canvas.width = nextWidth;
+            canvas.height = nextHeight;
+        }
+
+        renderCanvas();
+    }, [renderCanvas]);
+
+    useEffect(() => {
+        resizeCanvas();
+    }, [resizeCanvas]);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const parent = canvas.parentElement;
+        if (!parent) return;
+
+        const resizeObserver = new ResizeObserver(() => resizeCanvas());
+        resizeObserver.observe(parent);
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [resizeCanvas]);
 
     const getMousePos = (e: React.MouseEvent) => {
         const canvas = canvasRef.current;

@@ -39,6 +39,17 @@ export default function PageToolbar({ shapes, onReset }: PageToolbarProps) {
 
             // Create shareable link
             const url = new URL(window.location.href);
+            const externalUrl =
+                url.searchParams.get('page') ||
+                url.searchParams.get('target') ||
+                url.searchParams.get('url');
+
+            if (externalUrl) {
+                url.searchParams.set('page', externalUrl);
+                url.searchParams.delete('target');
+                url.searchParams.delete('url');
+            }
+
             url.searchParams.set("id", newId);
             setSavedLink(url.toString());
 
