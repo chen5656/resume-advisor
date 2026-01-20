@@ -169,20 +169,18 @@
     justify-content: stretch;
 }
 
+
 .webpage-viewer {
     width: 100%;
-    padding: 16px 0 80px;
+    padding: 16px 0 20px;
 }
 
 .webpage-viewport {
     width: 100%;
-    overflow: hidden;
+    /* overflow: hidden;  <-- REMOVED: allow scrolling */
 }
 
-.webpage-scroll {
-    width: 100%;
-    will-change: transform;
-}
+/* .webpage-scroll REMOVED */
 
 .webpage-frame {
     position: relative;
@@ -291,39 +289,8 @@
     background: #fed7aa;
 }
 
-.webpage-pagination {
-    position: fixed;
-    left: 24px;
-    bottom: 24px;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 10px 14px;
-    border-radius: 12px;
-    background: rgba(255, 255, 255, 0.92);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-}
+/* .webpage-pagination REMOVED */
 
-.webpage-pagination button {
-    padding: 6px 12px;
-    border-radius: 8px;
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    background: #f8fafc;
-    cursor: pointer;
-    font-weight: 600;
-}
-
-.webpage-pagination button:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.webpage-pagination span {
-    font-weight: 600;
-    color: #334155;
-}
 
 @media (max-width: 720px) {
     .app-main--landing {

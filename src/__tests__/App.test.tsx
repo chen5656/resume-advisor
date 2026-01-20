@@ -14,7 +14,7 @@ describe('App', () => {
     it('renders landing view when no params are set', () => {
         render(<App />);
 
-        expect(screen.getByText('Resume Advisor')).toBeInTheDocument();
+        expect(screen.getByText('Web Page Reviewer')).toBeInTheDocument();
         expect(screen.getByLabelText('Page URL')).toBeInTheDocument();
     });
 
